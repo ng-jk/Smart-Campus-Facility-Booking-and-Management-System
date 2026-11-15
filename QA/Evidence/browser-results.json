@@ -1,0 +1,70 @@
+[
+  {
+    "id": "T01",
+    "actual": "Anonymous request redirected from booking history to sign-in."
+  },
+  {
+    "id": "T02",
+    "actual": "Invalid password was refused with the generic sign-in message."
+  },
+  {
+    "id": "T03",
+    "actual": "All three demo accounts authenticated and landed on their role-specific pages."
+  },
+  {
+    "id": "T04",
+    "actual": "Student was denied the administration page and administrator was denied the booking screen."
+  },
+  {
+    "id": "T05",
+    "actual": "Administrator created a facility and updated its capacity from 18 to 22."
+  },
+  {
+    "id": "T06",
+    "actual": "The name and type filters returned the matching active facility only."
+  },
+  {
+    "id": "T07",
+    "actual": "A missing booking purpose was refused by server validation."
+  },
+  {
+    "id": "T08",
+    "actual": "Two separate sessions submitted the same held slot. Exactly one got a booking ID and the other got the conflict message."
+  },
+  {
+    "id": "T09",
+    "actual": "The successful request was absent from the other account’s booking history."
+  },
+  {
+    "id": "T10",
+    "actual": "An administrator approved the pending request and the owner saw Approved in history."
+  },
+  {
+    "id": "T11",
+    "actual": "The facility report showed one request, one approval and one approved hour."
+  },
+  {
+    "id": "T12",
+    "actual": "An approved future booking prevented facility deactivation."
+  },
+  {
+    "id": "T13",
+    "actual": "The owner cancelled an approved request and the other account reused its released slot."
+  },
+  {
+    "id": "T14",
+    "actual": "The rejected request appeared in the owner’s history with Rejected status."
+  },
+  {
+    "id": "T15",
+    "actual": "Deactivation hid the room from bookers after its active reservations were resolved."
+  },
+  {
+    "id": "T16",
+    "actual": "Logout cleared access and a fresh request for Facilities redirected to sign-in."
+  },
+  {
+    "id": "T17",
+    "actual": "The staff facility screen fit a 390-pixel viewport without page-level horizontal scrolling."
+  }
+]

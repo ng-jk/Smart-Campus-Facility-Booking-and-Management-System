@@ -1,0 +1,34 @@
+<%@ Master Language="C#" CodeFile="Site.master.cs" Inherits="CampusShell" %>
+<!doctype html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="Campus.css" rel="stylesheet" runat="server" />
+</head>
+<body>
+    <a class="skip" href="#main">Skip to content</a>
+    <form id="campusForm" runat="server">
+        <header class="top">
+            <div class="bar">
+                <a class="brand" href="<%= ResolveUrl("~/Login.aspx") %>"><span aria-hidden="true">CB</span> Campus Booking</a>
+                <asp:PlaceHolder ID="SignedIn" runat="server" Visible="false">
+                    <nav aria-label="Main navigation">
+                        <asp:HyperLink ID="BookLink" runat="server" NavigateUrl="~/Booking.aspx">Facilities</asp:HyperLink>
+                        <asp:HyperLink ID="HistoryLink" runat="server" NavigateUrl="~/History.aspx">My bookings</asp:HyperLink>
+                        <asp:HyperLink ID="AdminLink" runat="server" NavigateUrl="~/Admin.aspx">Administration</asp:HyperLink>
+                    </nav>
+                    <div class="account">
+                        <asp:Literal ID="Account" runat="server" Mode="Encode" />
+                        <asp:Button ID="SignOut" runat="server" Text="Sign out" CssClass="secondary small" CausesValidation="false" OnClick="SignOut_Click" />
+                    </div>
+                </asp:PlaceHolder>
+            </div>
+        </header>
+        <main id="main" tabindex="-1" class="wrap">
+            <asp:ContentPlaceHolder ID="Main" runat="server" />
+        </main>
+    </form>
+</body>
+</html>

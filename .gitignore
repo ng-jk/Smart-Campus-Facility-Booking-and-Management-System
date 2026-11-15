@@ -1,0 +1,9 @@
+/.vs/
+/Web/bin/
+/Web/obj/
+/evidence/
+/*.zip
+*.user
+*.suo
+*.mdf
+*.ldf

@@ -1,0 +1,1 @@
+T18 PASS: The signed-in staff session was idle for 75 seconds with the QA timeout set to one minute. History redirected to sign-in.

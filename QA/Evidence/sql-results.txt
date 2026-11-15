@@ -1,0 +1,8 @@
+Changed database context to 'CampusBookings'.
+D01 PASS: Facility insert, update and lookup returned the expected record.
+D02 PASS: Booking insert produced a pending record with the correct owner.
+Warning: Null value is eliminated by an aggregate or other SET operation.
+D03 PASS: Approval changed status and added 60 approved minutes to the report.
+D04 PASS: The unrelated staff account does not own the booking and changed zero rows.
+D05 PASS: Cancellation released the slot and the subsequent request was rejected.
+D06 PASS: Deactivation preserved historical rows until the QA cleanup deleted its own fixture.
