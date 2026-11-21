@@ -3,6 +3,7 @@
 USE CampusBookings;
 GO
 IF DATABASE_PRINCIPAL_ID(N'CampusWeb') IS NULL CREATE ROLE CampusWeb;
+GRANT SELECT ON dbo.Roles TO CampusWeb;
 GRANT SELECT ON dbo.Users TO CampusWeb;
 GRANT SELECT ON dbo.Facilities TO CampusWeb;
 GRANT SELECT ON dbo.TimeSlots TO CampusWeb;
