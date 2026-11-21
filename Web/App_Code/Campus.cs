@@ -140,8 +140,9 @@ namespace Campus
 
         public static CampusUser SignIn(string name, string password)
         {
-            DataTable rows = Db.Rows(@"SELECT UserId,DisplayName,RoleName,PasswordSalt,PasswordHash
-                FROM dbo.Users WHERE UserName=@Name", false, Db.Arg("Name", SqlDbType.NVarChar, name, 50));
+            DataTable rows = Db.Rows(@"SELECT u.UserId,u.DisplayName,r.RoleName,u.PasswordSalt,u.PasswordHash
+                FROM dbo.Users u JOIN dbo.Roles r ON r.RoleId=u.RoleId
+                WHERE u.UserName=@Name", false, Db.Arg("Name", SqlDbType.NVarChar, name, 50));
             DataRow row = rows.Rows.Count == 0 ? null : rows.Rows[0];
             var salt = row == null ? new byte[16] : (byte[])row["PasswordSalt"];
             var expected = row == null ? new byte[32] : (byte[])row["PasswordHash"];
