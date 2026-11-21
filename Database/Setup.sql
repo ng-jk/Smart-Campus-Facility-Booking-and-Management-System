@@ -16,11 +16,15 @@ SET ARITHABORT ON;
 GO
 IF OBJECT_ID(N'dbo.Users',N'U') IS NULL
 BEGIN
+    CREATE TABLE dbo.Roles (
+    RoleId int IDENTITY PRIMARY KEY,
+    RoleName varchar(50) NOT NULL UNIQUE
+    );
     CREATE TABLE dbo.Users (
         UserId int IDENTITY PRIMARY KEY,
         UserName nvarchar(50) NOT NULL UNIQUE,
         DisplayName nvarchar(80) NOT NULL,
-        RoleName varchar(13) NOT NULL CHECK (RoleName IN ('Student','Staff','Administrator')),
+        RoleId int NOT NULL REFERENCES dbo.Roles(RoleId),
         PasswordSalt binary(16) NOT NULL,
         PasswordHash binary(32) NOT NULL
     );
@@ -59,6 +63,7 @@ BEGIN
         ON dbo.Bookings(FacilityId, BookingDate, SlotId) WHERE Status IN (0,1);
     CREATE INDEX IX_Bookings_UserDate ON dbo.Bookings(UserId, BookingDate DESC);
     CREATE INDEX IX_Bookings_DateFacility ON dbo.Bookings(BookingDate, FacilityId) INCLUDE (Status);
+    INSERT dbo.Roles(RoleName) VALUES ('Student'),('Staff'),('Administrator');
     INSERT dbo.TimeSlots VALUES
        (1,'08:00','09:00'),(2,'09:00','10:00'),(3,'10:00','11:00'),(4,'11:00','12:00'),
        (5,'12:00','13:00'),(6,'13:00','14:00'),(7,'14:00','15:00'),(8,'15:00','16:00'),
@@ -91,7 +96,7 @@ BEGIN
        OR (@BookingDate=CAST(@Now AS date) AND @Start<=CAST(@Now AS time))
        OR NULLIF(LTRIM(RTRIM(@Purpose)),N'') IS NULL
        THROW 51001,'Enter an eligible date, time and purpose.',1;
-    IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId=@UserId AND RoleName IN ('Student','Staff'))
+    IF NOT EXISTS (SELECT 1 FROM dbo.Users u JOIN dbo.Roles r ON r.RoleId=u.RoleId WHERE UserId=@UserId AND RoleName IN ('Student','Staff'))
        THROW 51002,'Only students and staff can request bookings.',1;
     BEGIN TRY
         BEGIN TRANSACTION;
@@ -128,7 +133,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     IF @Decision IS NULL OR @Decision NOT IN (1,2)
-       OR NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId=@ActorId AND RoleName='Administrator')
+       OR NOT EXISTS (SELECT 1 FROM dbo.Users u JOIN dbo.Roles r ON r.RoleId=u.RoleId WHERE UserId=@ActorId AND RoleName='Administrator')
         THROW 51005,'The review is not permitted.',1;
     DECLARE @Now datetime2 = DATEADD(hour,8,SYSUTCDATETIME());
     UPDATE b SET Status=@Decision, ReviewedBy=@ActorId, ChangedUtc=SYSUTCDATETIME()
@@ -145,7 +150,7 @@ CREATE OR ALTER PROCEDURE dbo.SaveFacility
 AS
 BEGIN
     SET NOCOUNT ON;
-    IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId=@ActorId AND RoleName='Administrator')
+    IF NOT EXISTS (SELECT 1 FROM dbo.Users u JOIN dbo.Roles r ON r.RoleId=u.RoleId WHERE UserId=@ActorId AND RoleName='Administrator')
         THROW 51005,'The change is not permitted.',1;
     IF @FacilityId=0
         INSERT dbo.Facilities(Name,Category,Location,Capacity) VALUES (@Name,@Category,@Location,@Capacity);
@@ -160,7 +165,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-    IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId=@ActorId AND RoleName='Administrator')
+    IF NOT EXISTS (SELECT 1 FROM dbo.Users u JOIN dbo.Roles r ON r.RoleId=u.RoleId WHERE UserId=@ActorId AND RoleName='Administrator')
         THROW 51005,'The change is not permitted.',1;
     DECLARE @Now datetime2 = DATEADD(hour,8,SYSUTCDATETIME()), @Active bit, @Changed int;
     BEGIN TRY
